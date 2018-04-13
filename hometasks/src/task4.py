@@ -3,16 +3,18 @@
 # (Написати функцію тренування для задачі 3)
 # Запустити task4_helper_andrew, розібратись, як він працює, і переробити його для мережі з двома прихованими шарами по 21 нейрон, на виході 10 нейронів. Потренувати на MNIST.
 
+
 import numpy as np
 from skimage import io
 from mnist import MNIST
 import pickle
 
+
 # dimensions:
 _n = 28
 n = _n * _n
-n1 = 21
-n2 = 21
+n1 = 16 #21
+n2 = 16 #21
 n3 = 10
 
 
@@ -41,36 +43,6 @@ def random_parameters(n, n1, n2, n3):
     return W1, b1, W2, b2, W3, b3
 
 
-def print_parameters(W1, b1, W2, b2, W3, b3):
-    print('-- Weights and biases: --')
-    print('W1:')
-    print(W1)
-    print('b1:')
-    print(b1)
-    print('W2:')
-    print(W2)
-    print('b2:')
-    print(b2)
-    print('W3:')
-    print(W3)
-    print('b3:')
-    print(b3)
-    return
-
-
-def print_layers(a0, a1, a2, a3):
-    print('-- Layers: --')
-    print('a0:')
-    print(a0)
-    print('a1:')
-    print(a1)
-    print('a2:')
-    print(a2)
-    print('a3:')
-    print(a3)
-    return
-
-
 def nn(x, W1, b1, W2, b2, W3, b3):
     z1 = np.dot(W1, x) + b1
     a1 = g(z1)
@@ -90,7 +62,9 @@ def ys(label):
 def loss(a3, y):
     return np.sum(np.power(a3 - y, 2))
 
-def train_gd():
+
+# Vanilla Gradient Descent (full):
+def train_batch_gd():
     print('train_gd')
     mndata = MNIST('MNIST')
     images, labels = mndata.load_training()
@@ -170,20 +144,6 @@ def load_parameters():
     return W1, b1, W2, b2, W3, b3, i, full_loss
 
 
-def test_nn_random():
-    # tests if nn matrix operations work
-    print('test_nn_random')
-    x = np.random.random(size=(4, 1))
-    W1, b1, W2, b2, W3, b3 = random_parameters(4, 5, 5, 10)
-    print_parameters(W1, b1, W2, b2, W3, b3)
-    a1, a2, a3, z1, z2, z3 = nn(x, W1, b1, W2, b2, W3, b3)
-    print_layers(x, a1, a2, a3)
-    assert np.shape(a1) == (5, 1)
-    assert np.shape(a2) == (5, 1)
-    assert np.shape(a3) == (10, 1)
-    return
-
-
 def detect_digit(x, W1, b1, W2, b2, W3, b3):
     a1, a2, output, z1, z2, z3 = nn(x, W1, b1, W2, b2, W3, b3)
     print(output)
@@ -201,5 +161,5 @@ def detect_digit_from_file():
 
 
 # test_nn_random()
-train_gd()
+train_batch_gd()
 # detect_digit_from_file()
