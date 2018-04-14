@@ -223,6 +223,6 @@ def detect_digit_from_file():
 
 
 # test_nn_random()
-# train_batch_gd()
-train_sgd()
+train_batch_gd()
+# train_sgd()
 # detect_digit_from_file()
