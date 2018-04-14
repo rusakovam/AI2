@@ -4,6 +4,7 @@
 
 import numpy as np
 from skimage import io
+import os
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation
@@ -110,7 +111,22 @@ def predict_batch(weights):
     return
 
 
+def export_mnist():
+    if not os.path.exists('mnist'):
+        os.makedirs('mnist')
+    size = len(x_test)
+    for i in range(size):
+        img = x_test[i]
+        img = img.reshape((28, 28))
+        y = label_from_classifier(y_test[i])
+        io.imsave('mnist/mnist_{}_{}.png'.format(i, y), img)
+    return
+
+
+# export_mnist()
 # train()
-# predict_input('test_1.png', 'weights-mnist-sgd-mse-1000.h5py')
+predict_input('test_1.png', 'weights-mnist-sgd-mse-1000.h5py')
 # predict_test(17, 'weights-mnist-sgd-mse-1000.h5py')
 # predict_batch('weights-mnist-sgd-mse-1000.h5py')
+
+
