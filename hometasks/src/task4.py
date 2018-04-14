@@ -19,6 +19,7 @@ n3 = 10
 
 
 def sigmoid(x):
+    # print(x)
     # return 1 / (1 + np.exp(-x))
     # https://stackoverflow.com/questions/26218617/runtimewarning-overflow-encountered-in-exp-in-computing-the-logistic-function
     return .5 * (1 + np.tanh(.5 * x))
@@ -65,7 +66,7 @@ def loss(a3, y):
 
 # Vanilla Gradient Descent (full):
 def train_batch_gd():
-    print('train_gd')
+    print('Train with Batch GD')
     mndata = MNIST('MNIST')
     images, labels = mndata.load_training()
     print('loaded training data')
@@ -92,6 +93,9 @@ def train_batch_gd():
             loss_k = loss(a3, y)
             losses_k[k] = loss_k
 
+            if (k % 10000) == 0:
+                print('t.example {:5.0f}\'s loss: {:.10f}'.format(k, loss_k))
+
             error_a3 = a3 - y
             delta_a3 = error_a3 * dsigmoid(z3)
             error_a2 = delta_a3.T.dot(W3).T
@@ -99,15 +103,19 @@ def train_batch_gd():
             error_a1 = delta_a2.T.dot(W2).T
             delta_a1 = error_a1 * dsigmoid(z1)
 
-            dC_dW3_ks[k] = delta_a3.dot(a2.T)
-            dC_db3_ks[k] = delta_a3
-            dC_dW2_ks[k] = delta_a2.dot(a1.T)
-            dC_db2_ks[k] = delta_a2
-            dC_dW1_ks[k] = delta_a1.dot(a0.T)
-            dC_db1_ks[k] = delta_a1
+            _dC_dW3 = delta_a3.dot(a2.T)
+            _dC_db3 = delta_a3
+            _dC_dW2 = delta_a2.dot(a1.T)
+            _dC_db2 = delta_a2
+            _dC_dW1 = delta_a1.dot(a0.T)
+            _dC_db1 = delta_a1
 
-            if (k % 10000) == 0:
-                print('t.example {:5.0f}\'s loss: {:.10f}'.format(k, loss_k))
+            dC_dW3_ks[k] = _dC_dW3
+            dC_db3_ks[k] = _dC_db3
+            dC_dW2_ks[k] = _dC_dW2
+            dC_db2_ks[k] = _dC_db2
+            dC_dW1_ks[k] = _dC_dW1
+            dC_db1_ks[k] = _dC_db1
 
         full_loss = np.mean(np.abs(losses_k))
 
@@ -128,6 +136,60 @@ def train_batch_gd():
         # if (j % 10) == 0:
         save_parameters(W1, b1, W2, b2, W3, b3, i, full_loss)
         print('full loss: {:06.06f}'.format(full_loss))
+
+    return
+
+
+# Stochastic gradient descent
+# In progress - doesn't work yet
+def train_sgd():
+    print('Train with SGD')
+    mndata = MNIST('MNIST')
+    images, labels = mndata.load_training()
+    print('loaded training data')
+    dataset_size = len(images)
+    W1, b1, W2, b2, W3, b3 = random_parameters(n, n1, n2, n3)
+    alpha = 0.0001
+    count = 1000
+
+    for i in range(count):
+        losses_k = np.zeros(shape=(dataset_size, 1))
+
+        print('--- iteration {:.0f} ---'.format(i))
+        for k in range(dataset_size):
+            a0 = np.array(images[k]).reshape(n, 1)
+            y = ys(labels[k])
+            a1, a2, a3, z1, z2, z3 = nn(a0, W1, b1, W2, b2, W3, b3)
+
+            loss_k = loss(a3, y)
+            losses_k[k] = loss_k
+
+            if (k % 10000) == 0:
+                print('t.example {:5.0f}\'s loss: {:.10f}'.format(k, loss_k))
+
+            error_a3 = a3 - y
+            delta_a3 = error_a3 * dsigmoid(z3)
+            error_a2 = delta_a3.T.dot(W3).T
+            delta_a2 = error_a2 * dsigmoid(z2)
+            error_a1 = delta_a2.T.dot(W2).T
+            delta_a1 = error_a1 * dsigmoid(z1)
+
+            dC_dW3 = delta_a3.dot(a2.T)
+            dC_db3 = delta_a3
+            dC_dW2 = delta_a2.dot(a1.T)
+            dC_db2 = delta_a2
+            dC_dW1 = delta_a1.dot(a0.T)
+            dC_db1 = delta_a1
+
+            W1 -= alpha * dC_dW1
+            b1 -= alpha * dC_db1
+            W2 -= alpha * dC_dW2
+            b2 -= alpha * dC_db2
+            W3 -= alpha * dC_dW3
+            b3 -= alpha * dC_db3
+
+            save_parameters(W1, b1, W2, b2, W3, b3, i, loss_k)
+            print('loss: {:06.06f}'.format(loss_k))
 
     return
 
@@ -161,5 +223,6 @@ def detect_digit_from_file():
 
 
 # test_nn_random()
-train_batch_gd()
+# train_batch_gd()
+train_sgd()
 # detect_digit_from_file()
