@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="03f9c531-2634-4391-bbc9-0faa0e6912fe" name="marina-container" url="http://marina-container.local">
+        <fileTransfer host="marina-container.local" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/ubuntu" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
