@@ -1,21 +1,35 @@
-import numpy as np
-import os
-from scipy.misc import imread, imresize
-from keras.applications.resnet50 import ResNet50
+# coding=UTF-8
 
-file_names = ['dataset/' + s for s in os.listdir('dataset/')]
+# Задача:
+# дописати файл get_vectors.py
+# вкидати файли по 16/32 штуки в модель
+# зберігати відповідні вектори у numpy.array з відповідними назвами зображень у папку `vectors`
+
+
+import os
+
+import numpy as np
+from keras.applications.resnet50 import ResNet50
+from scipy.misc import imread, imresize
+
+file_names = os.listdir('dataset/')
 
 model = ResNet50(include_top=False, pooling='avg')
 
-img = imread(file_names[0], mode='RGB')
-img = imresize(img, (224, 224, 3))
+batch_size = 16
 
+for i in range(0, len(file_names), batch_size):
+    batch = file_names[i: i + batch_size]
+    x_batch = np.zeros((len(batch), 224, 224, 3), dtype='float')
 
-x_batch = np.zeros((1, 224, 224, 3), dtype='float')
-x_batch[0] = img
+    for j, fn in enumerate(batch):
+        img = imread('dataset/' + fn, mode='RGB')
+        img = imresize(img, (224, 224, 3))
+        x_batch[j] = img
 
-print(x_batch.shape)
+    x_batch = x_batch / 127.5 - 1
 
-prediction = model.predict(x_batch)
+    prediction = model.predict(x_batch)
 
-np.save('vectors/1.npy', prediction[0])
+    for j, fn in enumerate(batch):
+        np.save('vectors/' + fn + '.npy', prediction[j])
