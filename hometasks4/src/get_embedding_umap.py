@@ -8,7 +8,7 @@ embeddingFile = embeddingDir + 'embedding_umap.npy'
 
 vectors = []
 
-vectorFiles = os.listdir(vectorsDir)
+vectorFiles = sorted(os.listdir(vectorsDir))
 for f in vectorFiles:
     vector = np.load(vectorsDir + f)
     vectors.append(vector)
@@ -17,7 +17,7 @@ npVectors = np.array(vectors, dtype=float)
 
 embedding = umap.UMAP().fit_transform(npVectors)
 
-if not os._exists(embeddingDir):
+if not os.path.exists(embeddingDir):
     os.makedirs(embeddingDir)
 
 np.save(embeddingFile, embedding)

@@ -8,7 +8,7 @@ embeddingFile = embeddingDir + 'embedding_tsne.npy'
 
 vectors = []
 
-vectorFiles = os.listdir(vectorsDir)
+vectorFiles = sorted(os.listdir(vectorsDir))
 for f in vectorFiles:
     vector = np.load(vectorsDir + f)
     vectors.append(vector)
