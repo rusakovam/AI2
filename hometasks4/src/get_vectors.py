@@ -19,7 +19,7 @@ model = ResNet50(include_top=False, pooling='avg')
 
 batch_size = 16
 
-if not os._exists(vectorsDir):
+if not os.path.exists(vectorsDir):
     os.makedirs(vectorsDir)
 
 file_names = os.listdir(datasetDir)

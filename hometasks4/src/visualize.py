@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.misc import imread, imsave, imresize
 
 datasetDir = '../dataset/'
@@ -9,16 +8,6 @@ embeddingUmapFile = embeddingDir + 'embedding_umap.npy'
 visFile = embeddingDir + 'visualize_umap.png'
 
 embedding = np.load(embeddingUmapFile)
-
-
-def plot():
-    # embedding = np.random.random(size=(10, 2)) * 10
-    # print(embedding)
-
-    plt.grid(True)
-    plt.plot(embedding[:, 0], embedding[:, 1], 'ro')
-    plt.show()
-    return
 
 
 def visualize(embedding, vissize=(6000, 6000), scale=0.1, border=500):
@@ -49,7 +38,7 @@ def visualize(embedding, vissize=(6000, 6000), scale=0.1, border=500):
 
     return
 
-# plot()
+
 visualize(embedding)
 
 print('\nok')
