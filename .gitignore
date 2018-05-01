@@ -103,3 +103,5 @@ ENV/
 hometasks4/dataset_src/
 hometasks4/dataset/
 Hometasks4/vectors/
+hometasks4/embedding/embedding.npy
+hometasks4/embedding/npvectors.npy
