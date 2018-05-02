@@ -15,7 +15,7 @@ for f in vectorFiles:
 
 npVectors = np.array(vectors, dtype=float)
 
-embedding = umap.UMAP().fit_transform(npVectors)
+embedding = umap.UMAP(n_neighbors=15, min_dist=0.1).fit_transform(npVectors)
 
 if not os.path.exists(embeddingDir):
     os.makedirs(embeddingDir)
