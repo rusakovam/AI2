@@ -10,10 +10,10 @@ visFile = embeddingDir + 'visualize_umap.png'
 embedding = np.load(embeddingUmapFile)
 
 
-def visualize(embedding, vissize=(6000, 6000), scale=0.1, border=500):
-    vis = np.zeros(shape=(vissize[0], vissize[1], 3))
+def visualize(embedding, canvasSize=(6000, 6000), iconSize=32, border=500):
+    vis = np.zeros(shape=(canvasSize[0], canvasSize[1], 3))
 
-    borderWiseSize = np.array(vissize) - 2 * border
+    borderWiseSize = np.array(canvasSize) - 2 * border
     embedding = embedding * (np.divide(borderWiseSize, np.ptp(embedding, axis=0)))
 
     embedding = embedding - np.min(embedding, axis=0) + border
@@ -24,8 +24,14 @@ def visualize(embedding, vissize=(6000, 6000), scale=0.1, border=500):
     for f in images:
         print('>', f)
         img = imread(datasetDir + f, mode='RGB')
-        imgx = int(img.shape[0] * scale)
-        imgy = int(img.shape[1] * scale)
+        ar = img.shape[0] / img.shape[1]
+        if ar > 1:
+            imgx = int(iconSize)
+            imgy = int(iconSize / ar)
+        else:
+            imgy = int(iconSize)
+            imgx = int(iconSize * ar)
+
         img = imresize(img, (imgx, imgy, 3))
         x = int(embedding[i, 0] - imgx / 2)
         y = int(embedding[i, 1] - imgy / 2)
