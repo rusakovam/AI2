@@ -17,7 +17,7 @@ npVectors = np.array(vectors, dtype=float)
 
 embedding = bh_sne(npVectors)
 
-if not os._exists(embeddingDir):
+if not os.path.exists(embeddingDir):
     os.makedirs(embeddingDir)
 
 np.save(embeddingFile, embedding)
