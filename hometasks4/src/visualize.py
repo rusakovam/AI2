@@ -4,13 +4,13 @@ from scipy.misc import imread, imsave, imresize
 
 datasetDir = '../dataset/'
 embeddingDir = '../embedding/'
-embeddingUmapFile = embeddingDir + 'embedding_umap.npy'
-visFile = embeddingDir + 'visualize_umap.png'
+embeddingFile = embeddingDir + 'embedding_tsne.npy'
+visFile = embeddingDir + 'visualize_tsne.png'
 
-embedding = np.load(embeddingUmapFile)
+embedding = np.load(embeddingFile)
 
 
-def visualize(embedding, canvasSize=(6000, 6000), iconSize=32, border=500):
+def visualize(embedding, visFile, canvasSize=(6000, 6000), iconSize=32, border=500):
     vis = np.zeros(shape=(canvasSize[0], canvasSize[1], 3))
 
     borderWiseSize = np.array(canvasSize) - 2 * border
@@ -45,6 +45,6 @@ def visualize(embedding, canvasSize=(6000, 6000), iconSize=32, border=500):
     return
 
 
-visualize(embedding)
+visualize(embedding, visFile)
 
 print('\nok')
