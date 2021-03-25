@@ -25,7 +25,7 @@ python-dateutil==2.7.2
 python-mnist==0.5
 pytz==2018.3
 PyWavelets==0.5.2
-PyYAML==3.12
+PyYAML==5.4
 scikit-image==0.13.1
 scipy==1.0.1
 six==1.11.0
